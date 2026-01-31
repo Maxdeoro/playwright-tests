@@ -1,5 +1,5 @@
 {
-  "name": "playwright-tasks",
+  "name": "playwright-start",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,9 +7,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "devDependencies": {
-    "@playwright/test": "^1.51.1",
-    "@types/node": "^22.13.17"
+    "@playwright/test": "^1.58.1",
+    "@types/node": "^25.1.0"
   }
 }
