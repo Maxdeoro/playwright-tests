@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Поиск элементов по роли "button"', () => {
+test.describe('Get element by role "button"', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/locator_getbyrole');
   });
@@ -8,7 +8,7 @@ test.describe('Поиск элементов по роли "button"', () => {
   // Задание 1: Найди кнопку "Основное действие" используя getByRole с указанием роли и текста
   // После нахождения кнопки проверь что она видима и имеет класс primary-btn
 
-  test('Найти основную кнопку по роли и тексту', async ({ page }) => {
+  test('Get button by role and text', async ({ page }) => {
     const primaryButton = page.getByRole('button', {name: 'Основное действие'});
       await expect(primaryButton).toBeVisible();
     await expect(primaryButton).toHaveClass(/primary-btn/);
@@ -17,7 +17,7 @@ test.describe('Поиск элементов по роли "button"', () => {
   // Задание 2: Найди неактивную кнопку используя getByRole с указанием disabled состояния
   // Проверь что кнопка видима и действительно disabled
 
-  test('Найти неактивную кнопку по роли и состоянию', async ({ page }) => {
+  test('Get not-active button by role and state', async ({ page }) => {
     const disabledButton = page.getByRole('button', {disabled: true});
       await expect(disabledButton).toBeVisible();
     await expect(disabledButton).toBeDisabled();
@@ -25,48 +25,49 @@ test.describe('Поиск элементов по роли "button"', () => {
 
   // Задание 3: Найди элемент div с ролью button (не настоящую кнопку)
   // Проверь что элемент видим и содержит текст "Div как кнопка"
-  test('Найти div с ролью кнопки', async ({ page }) => {
+  test('Get DIV with role=button', async ({ page }) => {
     const divButton = page.getByRole('button', {name: 'Div как кнопка'});
       await expect(divButton).toBeVisible();
     await expect(divButton).toHaveText('Div как кнопка');
   });
+
 // });
 
-// test.describe('Поиск элементов форм по ролям', () => {
-//   test.beforeEach(async ({ page }) => {
-//     await page.goto('https://osstep.github.io/locator_getbyrole');
-//   });
+test.describe('Get form elements by roles', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('https://osstep.github.io/locator_getbyrole');
+  });
 
   // Задание 1: Найди поле "Имя пользователя" по роли textbox и связанному label
   // Заполни поле текстом "тестовый_пользователь" и проверь значение
-  // test('Найти поля формы по их ролям', async ({ page }) => {
-  //   const usernameInput = // локатор
-  //     await expect(usernameInput).toBeVisible();
-  //   await usernameInput.fill('тестовый_пользователь');
-  //   await expect(usernameInput).toHaveValue('тестовый_пользователь');
-  // });
+  test('Get form fields by roles', async ({ page }) => {
+    const usernameInput = page.getByRole('textbox',{name: 'Имя пользователя'});
+    await expect(usernameInput).toBeVisible();
+    await usernameInput.fill('test user');
+    await expect(usernameInput).toHaveValue('test user');
+  });
 
   // Задание 2: Найди чекбокс "Подписаться на рассылку" по роли checkbox
   // Проверь что он не выбран, затем выбери его и проверь снова
-  // test('Найти чекбоксы по роли checkbox', async ({ page }) => {
-  //   const newsletterCheckbox = // локатор
-  //     await expect(newsletterCheckbox).toBeVisible();
-  //   await expect(newsletterCheckbox).not.toBeChecked();
-  //   await newsletterCheckbox.check();
-  //   await expect(newsletterCheckbox).toBeChecked();
-  // });
+  test('Get element by role=checkbox', async ({ page }) => {
+    const newsletterCheckbox = page.getByRole('checkbox', {name: 'Подписаться на рассылку'});
+      await expect(newsletterCheckbox).toBeVisible();
+    await expect(newsletterCheckbox).not.toBeChecked();
+    await newsletterCheckbox.check();
+    await expect(newsletterCheckbox).toBeChecked();
+  });
 
   // Задание 3: Заполни форму и отправь её:
   // 1. Найди и заполни поле имени
   // 2. Найди и заполни поле пароля
   // 3. Найди и выбери страну из выпадающего списка
   // 4. Найди и нажми кнопку отправки
-//   test('Заполнить и отправить форму', async ({ page }) => {
-//     await page.ЛОКАТОР.fill('тест');
-//     await page.ЛОКАТОР.fill('пароль123');
-//     await page.ЛОКАТОР.selectOption('ru');
-//     await page.ЛОКАТОР.click();
-//   });
+  test('Fill and send form', async ({ page }) => {
+    await page.getByRole('textbox', {name: 'Имя пользователя'}).fill('user name test');
+    await page.getByRole('textbox', {name: 'Пароль'}).fill('password123');
+    await page.getByRole('combobox', {name: 'Страна'}).selectOption('ru');
+    await page.getByRole('button', {name: 'Отправить'}).click();
+  });
 // });
 
 // test.describe('Поиск вкладок и уведомлений по ролям', () => {
@@ -98,5 +99,5 @@ test.describe('Поиск элементов по роли "button"', () => {
 //     const successAlert = // локатор
 //       await expect(successAlert).toBeVisible();
 //     await expect(successAlert).toHaveClass(/alert-success/);
-//   });
+  });
 });
