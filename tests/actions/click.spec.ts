@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Базовые действия с кликами', () => {
+test.describe('General actions with click', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_click');
   });
@@ -10,13 +10,13 @@ test.describe('Базовые действия с кликами', () => {
   // 2. Выполнить клик методом click()
   // 3. Проверить что счетчик кликов увеличился
   // 4. Повторить клики и проверки
-  test('Обычный клик по кнопке увеличивает счетчик', async ({ page }) => {
+  test('Click button to change counter', async ({ page }) => {
     const button = page.getByText('Кликни меня', { exact: true });
-    // твой код
+    await button.click();
     await expect(page.getByText('Результат: 1 кликов')).toBeVisible();
 
-    // твой код
-    // твой код
+    await button.click();
+    await button.click();
     await expect(page.getByText('Результат: 3 кликов')).toBeVisible();
   });
 
@@ -25,14 +25,16 @@ test.describe('Базовые действия с кликами', () => {
   // 2. Выполнить двойной клик методом dblclick()
   // 3. Проверить что счетчик двойных кликов увеличился
   // 4. Повторить для проверки инкремента
-  test('Двойной клик увеличивает специальный счетчик', async ({ page }) => {
+  test('Double click to change counter', async ({ page }) => {
     const dblClickArea = page.locator('#dblclick-area'); // Локатор для счетчика
-    // твой код
+    await dblClickArea.dblclick();
     await expect(dblClickArea).toContainText('1');
+    await dblClickArea.dblclick();
+    await expect(dblClickArea).toContainText('2');
   });
 });
 
-test.describe('Действия с правой кнопкой мыши', () => {
+test.describe('Actions with right button click', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_click');
   });
@@ -43,14 +45,14 @@ test.describe('Действия с правой кнопкой мыши', () => 
   // 3. Проверить появление меню по visibility
   // 4. Кликнуть на пункт меню "Копировать"
   // 5. Проверить текст подтверждения
-  test('Правый клик открывает контекстное меню', async ({ page }) => {
+  test('Right click opens context menu', async ({ page }) => {
     const rightClickArea = page.getByText('Кликни правой кнопкой');
-    // твой код
+    await rightClickArea.click({button: 'right'});
 
     const contextMenu = page.getByText('Копировать').first();
     await expect(contextMenu).toBeVisible();
 
-    // твой код
+    await contextMenu.click();
     await expect(page.getByText('Выбрано: Копировать')).toBeVisible();
   });
 
@@ -59,17 +61,17 @@ test.describe('Действия с правой кнопкой мыши', () => 
   // 2. Получить координаты элемента
   // 3. Кликнуть в центре элемента правой кнопкой
   // 4. Проверить что меню появилось
-  test('Контекстное меню появляется в месте клика', async ({ page }) => {
+  test('Check that context menu appears at the click point', async ({ page }) => {
     const rightClickArea = page.getByText('Кликни правой кнопкой');
     const box = await rightClickArea.boundingBox();
     if (box) {
-      // твой код
+      await rightClickArea.click({button: 'right'});
     }
     await expect(page.getByText('Копировать').first()).toBeVisible();
   });
 });
 
-test.describe('Продвинутые техники кликов', () => {
+test.describe('Advanced clicks', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_click');
   });
@@ -78,9 +80,9 @@ test.describe('Продвинутые техники кликов', () => {
   // 1. Найти область для клика по тексту
   // 2. Кликнуть в конкретных координатах (50, 100)
   // 3. Проверить что координаты зарегистрированы
-  test('Клик в конкретных координатах регистрирует позицию', async ({ page }) => {
+  test('A click in specific coordinates registers the position', async ({ page }) => {
     const clickArea = page.getByText('Кликни в любом месте');
-    // твой код
+    await clickArea.click({position: {x: 50, y: 100}});
 
     await expect(page.getByText(/Позиция?/)).toHaveText(/^Позиция: \(\d+, \d+\)$/);
   });
@@ -91,14 +93,14 @@ test.describe('Продвинутые техники кликов', () => {
   // 3. Проверить изменение статуса
   // 4. Имитировать mouseup после задержки
   // 5. Проверить обновление статуса
-  test('Удержание кнопки изменяет статус', async ({ page }) => {
+  test('Mousedown/mouseup changes status', async ({ page }) => {
     const holdButton = page.getByText('Удерживай меня');
 
-    // твой код
+    await holdButton.dispatchEvent('mousedown');
     await expect(page.getByText('Статус: нажата')).toBeVisible();
 
     await page.waitForTimeout(1000);
-    // твой код
+    await holdButton.dispatchEvent('mouseup');
     await expect(page.getByText('Статус: отпущена')).toBeVisible();
   });
 });
