@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Базовые hover-эффекты', () => {
+test.describe('General hover effects', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_hover');
   });
@@ -10,10 +10,10 @@ test.describe('Базовые hover-эффекты', () => {
   // 2. Проверить что событие залогировано
   // 3. Убрать курсор
   // 4. Проверить что событие ухода также залогировано
-  test('Hover события логируются', async ({ page }) => {
+  test('Hover events logging', async ({ page }) => {
     const hoverBox = page.getByText('Наведи на меня');
 
-    // твой код
+    await hoverBox.hover();
     await expect(page.locator('#hover-log')).toContainText('Наведение на простой блок');
 
     await page.mouse.move(0, 0);
@@ -21,7 +21,7 @@ test.describe('Базовые hover-эффекты', () => {
   });
 });
 
-test.describe('Всплывающие подсказки', () => {
+test.describe('Tooltips', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_hover');
   });
@@ -32,7 +32,7 @@ test.describe('Всплывающие подсказки', () => {
   // 3. Выполнить hover на элементе
   // 4. Проверить что подсказка стала видимой
   // 5. Проверить текст подсказки
-  test('Подсказка появляется при hover', async ({ page }) => {
+  test('Tooltip appears when hover', async ({ page }) => {
     const tooltipTrigger = page.getByText('Наведи чтобы увидеть подсказку');
     const tooltip = page.getByText('Это текст подсказки');
 
@@ -40,7 +40,7 @@ test.describe('Всплывающие подсказки', () => {
     await expect(tooltip).toBeHidden();
 
     // Наводим курсор
-    // твой код
+    await tooltipTrigger.hover();
 
     // Проверяем появление подсказки
     await expect(tooltip).toBeVisible();
@@ -52,12 +52,12 @@ test.describe('Всплывающие подсказки', () => {
   // 2. Получить его координаты
   // 3. Выполнить hover
   // 4. Проверить что подсказка появляется над элементом
-  test('Подсказка правильно позиционируется', async ({ page }) => {
+  test('Check that tooltip correctly positioned', async ({ page }) => {
     const tooltipTrigger = page.getByText('Наведи чтобы увидеть подсказку');
     const tooltip = page.getByText('Это текст подсказки');
 
     const box = await tooltipTrigger.boundingBox();
-    // твой код
+    await tooltipTrigger.hover();
 
     const tooltipBox = await tooltip.boundingBox();
     if (tooltipBox && box) {
@@ -72,7 +72,7 @@ test.describe('Всплывающие подсказки', () => {
   });
 });
 
-test.describe('Выпадающие меню', () => {
+test.describe('Drop-down menus', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_hover');
   });
@@ -83,7 +83,7 @@ test.describe('Выпадающие меню', () => {
   // 3. Выполнить hover на пункте меню
   // 4. Проверить что подменю стало видимым
   // 5. Проверить наличие всех пунктов подменю
-  test('Hover открывает подменю', async ({ page }) => {
+  test('Hover opens drop-down menus', async ({ page }) => {
     const menuItem = page.getByText('Меню 1 Подменю 1.1 Подменю');
     const submenu = page.getByText('Подменю 1.1');
 
@@ -91,7 +91,7 @@ test.describe('Выпадающие меню', () => {
     await expect(submenu).toBeHidden();
 
     // Наводим курсор
-    // твой код
+    await menuItem.hover();
 
     // Проверяем что подменю появилось
     await expect(submenu).toBeVisible();
@@ -103,18 +103,18 @@ test.describe('Выпадающие меню', () => {
   // 2. Переместить курсор на "Меню 2"
   // 3. Проверить что подменю "Меню 1" скрылось
   // 4. Проверить что подменю "Меню 2" появилось
-  test('Переход между пунктами меню', async ({ page }) => {
+  test('Navigating between menu items', async ({ page }) => {
     const menuItem1 = page.getByText('Меню 1 Подменю 1.1 Подменю');
     const menuItem2 = page.getByText('Меню 2 Подменю');
     const submenu1 = page.getByText('Подменю 1.1');
     const submenu2 = page.getByText('Подменю 2.1');
 
     // Наводим на первое меню
-    // твой код
+    await menuItem1.hover();
     await expect(submenu1).toBeVisible();
 
     // Переходим на второе меню
-    // твой код
+    await menuItem2.hover();
     await expect(submenu1).toBeHidden();
     await expect(submenu2).toBeVisible();
   });
