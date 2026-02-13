@@ -1,6 +1,6 @@
 import { test, expect, Locator } from '@playwright/test';
 
-test.describe('Работа с базовыми select элементами', () => {
+test.describe('Working with general select elements', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_selectOptions');
   });
@@ -8,32 +8,32 @@ test.describe('Работа с базовыми select элементами', ()
   // Тест 1: Выбор одиночной опции по значению
   // 1. Найти select "Страна" по label
   // 2. Проверить что ничего не выбрано
-  // 3. Выбрать опцию "Россия" по значению 'ru'
+  // 3. Выбрать опцию "США" по значению 'us'
   // 4. Проверить что выбор зарегистрирован
   // 5. Проверить текст фидбэка
-  test('Выбор страны по значению', async ({ page }) => {
+  test('Pick country by value', async ({ page }) => {
     const countrySelect = page.getByLabel('Страна');
     await expect(countrySelect).toHaveValue('');
 
-    // твой код
-    await expect(countrySelect).toHaveValue('ru');
-    await expect(page.locator('#country-feedback')).toHaveText('Выбрано: Россия');
+    await countrySelect.selectOption('us');
+    await expect(countrySelect).toHaveValue('us');
+    await expect(page.locator('#country-feedback')).toHaveText('Выбрано: США');
   });
 
   // Тест 2: Выбор одиночной опции по тексту
   // 1. Найти select "Страна"
   // 2. Выбрать опцию "Германия" по тексту
   // 3. Проверить значение и фидбэк
-  test('Выбор страны по тексту', async ({ page }) => {
+  test('Pick country by text', async ({ page }) => {
     const countrySelect = page.getByLabel('Страна');
-    // твой код
+    await countrySelect.selectOption({label: 'Германия'});
 
     await expect(countrySelect).toHaveValue('de');
     await expect(page.locator('#country-feedback')).toHaveText('Выбрано: Германия');
   });
 });
 
-test.describe('Работа с select multiple', () => {
+test.describe('Working with select multiple', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_selectOptions');
   });
@@ -47,10 +47,10 @@ test.describe('Работа с select multiple', () => {
   // 2. Выбрать JavaScript и Python по значениям
   // 3. Проверить что выбраны только эти опции
   // 4. Проверить фидбэк
-  test('Множественный выбор по значениям', async ({ page }) => {
+  test('Multiple selection by value', async ({ page }) => {
     const languagesSelect = page.getByLabel('Языки программирования');
 
-    // твой код
+    await languagesSelect.selectOption(['js', 'py']);
 
     const selectedOptions = await getSelectedValues(languagesSelect);
     expect(selectedOptions).toEqual(['js', 'py']);
@@ -58,7 +58,7 @@ test.describe('Работа с select multiple', () => {
   });
 });
 
-test.describe('Продвинутые сценарии работы с select', () => {
+test.describe('Advanced scenarios with selectOptions', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://osstep.github.io/action_selectOptions');
   });
@@ -67,23 +67,23 @@ test.describe('Продвинутые сценарии работы с select', 
   // 1. Найти select "Марка автомобиля"
   // 2. Выбрать Toyota из группы "Японские"
   // 3. Проверить значение
-  test('Выбор из группированных опций', async ({ page }) => {
+  test('Selection from grouped options', async ({ page }) => {
     const carBrandSelect = page.getByLabel('Марка автомобиля');
 
-    // твой код
+    await carBrandSelect.selectOption('honda');
 
-    await expect(carBrandSelect).toHaveValue('toyota');
+    await expect(carBrandSelect).toHaveValue('honda');
   });
 
   // Тест 2: Работа с динамически добавленными select
   // 1. Дождаться появления динамического select
   // 2. Выбрать опцию по тексту
   // 3. Проверить значение
-  test('Динамически добавленный select', async ({ page }) => {
+  test('Dynamically added select', async ({ page }) => {
     const dynamicSelect = page.getByLabel('Динамический select');
     await expect(dynamicSelect).toBeVisible({ timeout: 2000 });
 
-    // твой код
+    await dynamicSelect.selectOption('Опция 2');
     await expect(dynamicSelect).toHaveValue('opt2');
   });
 });
