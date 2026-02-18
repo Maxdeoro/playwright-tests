@@ -27,7 +27,7 @@ test('Test of dynamically changing text', async ({ page }) => {
   await expect(dynamicText).toContainText('Initial dynamic text');
   const changeText = page.locator('#change-text');
   await changeText.click();
-  await expect(dynamicText).toContainClass('Text was changed at');
+  await expect(dynamicText).toContainText('Text was changed at');
   const addPart = page.locator('#add-part');
   await addPart.click();
   await expect(dynamicText).toContainText('(additional part)');
