@@ -68,10 +68,12 @@ const elements: Elements[] = [
   }
 ];
 
+const lightMode = ['light', 'dark'];
+
 test.describe('tests main page', () => {
 
   test.beforeEach(async ({page}) => {
-    await page.goto('https://playwright.dev', { timeout: 70000 });
+    await page.goto('https://playwright.dev', { timeout: 80000 });
   });
 
   test('test visibility of the navigation elements', async ({ page }) => {
@@ -130,6 +132,20 @@ test.describe('tests main page', () => {
           await expect.soft(locator(page)).toContainText(text);
         });
       }
+    });
+  });
+
+  test('Check switch light mode of the page', async ({page}) => {
+    await page.getByLabel('Switch between dark and light').click();
+    await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  });
+
+  lightMode.forEach((value) => {
+    test(`Check styles of active ${value} mode`, async ({page}) => {
+      await page.evaluate(() => {
+        document.querySelector('html')?.setAttribute('data-theme', value);
+      }, value);
+      await expect(page).toHaveScreenshot(`pageWith${value}Mode.png`);
     });
   });
 });
