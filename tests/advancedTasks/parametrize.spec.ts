@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // Тесты для формы входа
-test.describe('Параметризованные тесты формы входа', () => {
+test.describe('Parametrized tests for login form', () => {
   const loginTestCases = [
     {
       username: 'admin',
@@ -28,6 +28,32 @@ test.describe('Параметризованные тесты формы вход
   // 4. Нажать кнопку "Войти"
   // 5. Проверить сообщение системы
   // 6. Проверить класс сообщения (success/error)
+  loginTestCases.forEach(({username,password,expected}) => {
+    test(`Login test: ${username} || 'empty'/${password}-${expected}`, async ({page}) => {
+      await page.goto('https://osstep.github.io/parametrize');
+
+      await test.step('Fill login form', async () => {
+        if(username) {
+          await page.locator('#username').fill(username);
+        }
+        await page.getByRole('textbox', {name: 'Пароль'}).fill(password);
+      });
+
+      await test.step('Send form', async () => {
+        // await page.click('#login-btn');
+        await page.getByRole('button', {name: 'Войти'}).click();
+      });
+
+      await test.step('Check message', async () => {
+        const msg = page.locator('#message');
+        await expect.soft(msg).toBeVisible();
+        await expect.soft(msg).toHaveText(expected);
+
+        const expectedClass = expected === 'Успешный вход!' ? 'success' : 'error';
+        await expect(msg).toHaveClass(new RegExp(expectedClass));
+      });
+    });
+  });
 });
 
 // Тесты для калькулятора
