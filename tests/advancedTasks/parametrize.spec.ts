@@ -57,7 +57,7 @@ test.describe('Parametrized tests for login form', () => {
 });
 
 // Тесты для калькулятора
-test.describe('Параметризованные тесты калькулятора', () => {
+test.describe('Parametrized tests for calculator', () => {
   const calculatorTestCases = [
     { a: 5, b: 3, operation: 'add', expected: 8 },
     { a: 10, b: 0, operation: 'add', expected: 10 },
@@ -70,4 +70,24 @@ test.describe('Параметризованные тесты калькулят�
   // 3. Ввести второе число
   // 4. Нажать кнопку операции (сложение/умножение)
   // 5. Проверить результат вычисления
+  calculatorTestCases.forEach(({ a, b, operation, expected }) => {
+    test(`Operation ${operation} for ${a} and ${b} → ${expected}`, async ({ page }) => {
+      await page.goto('https://osstep.github.io/parametrize');
+
+      await test.step('Enter numbers', async () => {
+        await page.fill('#num1', a.toString());
+        await page.fill('#num2', b.toString());
+      });
+
+      await test.step('Perform the operation', async () => {
+        const button = operation === 'add' ? '#add-btn' : '#multiply-btn';
+        await page.click(button);
+      });
+
+      await test.step('Check result', async () => {
+        const resultText = await page.locator('#result').innerText();
+        expect(resultText).toBe(`Результат: ${expected}`);
+      });
+    });
+  });
 });
