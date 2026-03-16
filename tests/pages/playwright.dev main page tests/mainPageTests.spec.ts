@@ -1,4 +1,5 @@
 import { test, expect, Page, Locator } from '@playwright/test';
+import { MainPage } from '../../models/MainPage';
 
 interface Elements {
   locator: (page: Page) => Locator;
@@ -73,15 +74,19 @@ const lightMode = ['light', 'dark'];
 test.describe('tests main page', () => {
 
   test.beforeEach(async ({page}) => {
-    await page.goto('https://playwright.dev', { timeout: 80000 });
+    // await page.goto('https://playwright.dev', { timeout: 80000 });
   });
 
   test('test visibility of the navigation elements', async ({ page }) => {
-    elements.forEach(({locator, name}) => {
-      test.step(`test visibility of the ${name}`, async () => {
-        await expect.soft(locator(page)).toBeVisible();
-      });
-    });
+    // elements.forEach(({locator, name}) => {
+    //   test.step(`test visibility of the ${name}`, async () => {
+    //     await expect.soft(locator(page)).toBeVisible();
+    //   });
+    // });
+
+    const mainPage = new MainPage(page);
+    await mainPage.openMainPage();
+    await mainPage.checkElementsVisibility();
   });
 
   test('test button Get started', async ({ page }) => {
