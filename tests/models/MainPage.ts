@@ -76,7 +76,7 @@ export class MainPage {
     };
 
     async openMainPage() {
-        await this.page.goto('https://playwright.dev', {timeout: 50000});
+        await this.page.goto('https://playwright.dev', {timeout: 80000});
     };
 
     async checkElementsVisibility() {
@@ -87,4 +87,54 @@ export class MainPage {
             });
         };
     };
+
+    async checkElementsText() {
+        for(const {locator,name,text} of this.elements) {
+            if(text) {
+                  test.step(`Check text of the element ${name}`, async () => {
+                    await expect.soft(locator(this.page)).toContainText(text);
+                });
+            }
+        };
+    };
+
+    async checkElementsHrefAttribute() {
+        for(const {locator,name,attribute} of this.elements) {
+            if(attribute) {
+                test.step(`Check href attribute of the elenent ${name}`, async () => {
+                    await expect.soft(locator(this.page)).toHaveAttribute(attribute.type, attribute.value);
+                });
+            }
+        };
+    };
+
+    async checkLightModeSwitch() {
+        await this.page.getByLabel('Switch between dark and light').click();
+    };
+
+    async checkLightThemeAttributeValue() {
+        await expect.soft(this.page.locator('html')).toHaveAttribute('data-theme','dark');
+    };
+
+    async setLightMode() {
+        await this.page.evaluate(() => {
+            document.querySelector('html')?.setAttribute('data-theme', 'light');
+        });
+    };
+
+    async setDarkMode() {
+        await this.page.evaluate(() => {
+            document.querySelector('html')?.setAttribute('data-theme', 'dark');
+        });
+    };
+
+    async checkLayoutWithLightMode() {
+        await expect(this.page).toHaveScreenshot(`pageWith Light Mode.png`);
+    };
+
+    async checkLayoutWithDarkMode() {
+        await expect(this.page).toHaveScreenshot('page with Dark Mode.png');
+    };
+
+    async checkButtonGetStarted() {};
 };
