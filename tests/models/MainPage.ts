@@ -82,7 +82,7 @@ export class MainPage {
     async checkElementsVisibility() {
         // this.elements.forEach(({locator,name}) => {
         for(const {locator,name} of this.elements) {
-            test.step(`Check visibility of the element ${name}`, async () => {
+            await test.step(`Check visibility of the element ${name}`, async () => {
                 await expect.soft(locator(this.page)).toBeVisible();
             });
         };
@@ -91,7 +91,7 @@ export class MainPage {
     async checkElementsText() {
         for(const {locator,name,text} of this.elements) {
             if(text) {
-                  test.step(`Check text of the element ${name}`, async () => {
+                  await test.step(`Check text of the element ${name}`, async () => {
                     await expect.soft(locator(this.page)).toContainText(text);
                 });
             }
@@ -101,14 +101,14 @@ export class MainPage {
     async checkElementsHrefAttribute() {
         for(const {locator,name,attribute} of this.elements) {
             if(attribute) {
-                test.step(`Check href attribute of the elenent ${name}`, async () => {
+                await test.step(`Check href attribute of the elenent ${name}`, async () => {
                     await expect.soft(locator(this.page)).toHaveAttribute(attribute.type, attribute.value);
                 });
             }
         };
     };
 
-    async checkLightModeSwitch() {
+    async clickLightModeSwitch() {
         await this.page.getByLabel('Switch between dark and light').click();
     };
 
