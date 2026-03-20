@@ -1,15 +1,6 @@
-// import { test, expect, Page, Locator } from '@playwright/test';
 import { test, expect} from '../../fixtures/mainPage';
-import { MainPage } from '../../models/MainPage';
-
-// let mainPage: MainPage;
 
 test.describe('tests main page', () => {
-
-  // test.beforeEach(async ({page}) => {
-  //   mainPage = new MainPage(page);
-  //   await mainPage.openMainPage();
-  // });
 
   test('test visibility of the navigation elements', async ({mainPage}) => {
     await mainPage.checkElementsVisibility();
